@@ -3,9 +3,9 @@ import router from '@/router';
 import AuthService from '../services/auth.service';
 
 interface User {
-  id?: number;
-  username?: string;
-  // Add other user properties as needed
+  name: string;
+  email: string;
+  username: string;
 }
 
 interface AuthState {
@@ -20,10 +20,24 @@ interface LoginCredentials {
   password: string;
 }
 
+interface LoginResponse {
+  rc: string;
+  message: string;
+  timestamp: string;
+  payload: {
+    data: {
+      name: string;
+      email: string;
+      username: string;
+      access_token: string;
+    };
+  };
+}
+
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
-    token: AuthService.getToken(),
-    user: null,
+    token: localStorage.getItem('token'),
+    user: JSON.parse(localStorage.getItem('user') || 'null'),
     loading: false,
     error: null,
   }),
@@ -37,12 +51,16 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await AuthService.login(credentials);
-        this.token = response.access_token;
-        this.user = response.user;
+        const response: LoginResponse = await AuthService.login(credentials);
+        this.token = response.payload.data.access_token;
+        this.user = response.payload.data;
+
+        localStorage.setItem('token', this.token);
+        localStorage.setItem('user', JSON.stringify(this.user));
+
         router.push({ name: 'dashboard' });
       } catch (error: any) {
-        this.error = error.response?.data?.message || 'Login failed';
+        this.error = error.message || 'Login failed';
         throw error;
       } finally {
         this.loading = false;
@@ -50,7 +68,9 @@ export const useAuthStore = defineStore('auth', {
     },
 
     logout(): void {
-      AuthService.logout();
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+
       this.token = null;
       this.user = null;
       router.push({ name: 'login' });

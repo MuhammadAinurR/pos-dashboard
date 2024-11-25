@@ -11,14 +11,30 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/auth/LoginView.vue'),
+      component: () => import('@/views/Auth/LoginView.vue'),
       meta: { requiresAuth: false },
     },
     {
       path: '/dashboard',
-      name: 'dashboard',
-      component: () => import('@/views/DashboardView.vue'),
+      component: () => import('@/layouts/DashboardLayout.vue'),
       meta: { requiresAuth: true },
+      children: [
+        {
+          path: '/dashboard',
+          name: 'dashboard',
+          component: () => import('@/views/DashboardView.vue'),
+        },
+        {
+          path: '/setup/product/product-categories',
+          name: 'product-categories',
+          component: () => import('@/views/ProductCategories.vue'),
+        },
+        {
+          path: '/setup/product/manage-products',
+          name: 'manage-products',
+          component: () => import('@/views/ManageProducts.vue'),
+        },
+      ],
     },
   ],
 });

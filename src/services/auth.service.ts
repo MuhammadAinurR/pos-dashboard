@@ -30,14 +30,8 @@ class AuthService {
         credentials
       );
 
-      const { access_token } = response.data.payload.data;
-
-      if (access_token) {
-        localStorage.setItem('token', access_token);
-        localStorage.setItem(
-          'user',
-          JSON.stringify(response.data.payload.data)
-        );
+      if (response.data.payload.data.access_token) {
+        localStorage.setItem('token', response.data.payload.data.access_token);
       }
 
       return response.data;
