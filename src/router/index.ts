@@ -17,22 +17,33 @@ const router = createRouter({
     {
       path: '/dashboard',
       component: () => import('@/layouts/DashboardLayout.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, breadcrumb: 'Dashboard' },
       children: [
         {
           path: '/dashboard',
           name: 'dashboard',
           component: () => import('@/views/DashboardView.vue'),
+          meta: {
+            breadcrumb: 'Dashboard',
+          },
         },
         {
           path: '/setup/product/product-categories',
           name: 'product-categories',
           component: () => import('@/views/ProductCategories.vue'),
+          meta: {
+            breadcrumb: 'Product Categories',
+            parent: 'Setup / Product', // Optional: for custom parent paths
+          },
         },
         {
           path: '/setup/product/manage-products',
           name: 'manage-products',
           component: () => import('@/views/ManageProducts.vue'),
+          meta: {
+            breadcrumb: 'Manage Products',
+            parent: 'Setup / Product', // Optional: for custom parent paths
+          },
         },
       ],
     },

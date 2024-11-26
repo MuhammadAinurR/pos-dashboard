@@ -1,6 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import axiosInstance from './axios.config';
 
 // Interfaces for type safety
 interface LoginCredentials {
@@ -25,8 +24,8 @@ interface LoginResponse {
 class AuthService {
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
     try {
-      const response: AxiosResponse<LoginResponse> = await axios.post(
-        `${BASE_URL}/api/auth`,
+      const response: AxiosResponse<LoginResponse> = await axiosInstance.post(
+        '/api/auth',
         credentials
       );
 

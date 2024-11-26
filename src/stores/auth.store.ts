@@ -67,13 +67,16 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    logout(): void {
+    async logout(): Promise<void> {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
 
       this.token = null;
       this.user = null;
-      router.push({ name: 'login' });
+
+      if (router.currentRoute.value.name !== 'login') {
+        router.push({ name: 'login' });
+      }
     },
   },
 });

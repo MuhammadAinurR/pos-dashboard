@@ -1,11 +1,11 @@
 <template>
-  <li class="text-[#91C3FF]">
+  <li class="text-[#91C3FF]" :class="{ 'mt-1': !isFirstChild }">
     <template v-if="item.children">
       <button
         @click="toggleSubmenu"
-        class="flex items-center w-full p-2 rounded-radius12 transition-colors text-xs overflow-hidden"
+        class="flex items-center w-full p-1 rounded-radius12 transition-colors text-xs overflow-hidden"
         :class="{
-          'bg-blue-700': isActiveParent,
+          '': isActiveParent,
           'hover:bg-blue-700/50': !isActiveParent,
         }"
       >
@@ -33,7 +33,7 @@
     <router-link
       v-else
       :to="item.route"
-      class="relative flex items-center p-[2px] rounded-radius12 transition-colors text-xs"
+      class="relative flex items-center py-[1px] rounded-radius12 transition-colors text-xs font-thin w-[220px]"
       :class="{
         'bg-gradient-to-r from-[#5B9CE3] from-25% to-transparent to-80%':
           isActive,
@@ -42,9 +42,9 @@
     >
       <div
         :class="{
-          'flex items-center p-2 rounded-radius12 bg-gradient-to-r from-[#1D53B9] from-30% to-tertiary to-80% w-full text-white':
+          'flex items-center py-1 px-2 rounded-radius12 bg-gradient-to-r from-[#1D53B9] from-30% to-tertiary to-80% w-full text-white':
             isActive,
-          'hover:bg-blue-700/50 flex items-center p-2 w-full rounded-radius12':
+          'hover:bg-blue-700/50 flex items-center py-1 px-2 w-full rounded-radius12':
             !isActive,
         }"
       >
@@ -69,6 +69,10 @@ const props = defineProps({
   item: {
     type: Object,
     required: true,
+  },
+  isFirstChild: {
+    type: Boolean,
+    default: false,
   },
 });
 

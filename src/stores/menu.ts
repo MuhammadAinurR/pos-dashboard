@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
-import AuthService from '../services/auth.service';
+import axiosInstance from '../services/axios.config';
 
 export const useMenuStore = defineStore('menu', {
   state: () => ({
@@ -12,17 +11,8 @@ export const useMenuStore = defineStore('menu', {
   actions: {
     async fetchMenuItems() {
       this.loading = true;
-      const BASE_URL = import.meta.env.VITE_API_BASE_URL;
       try {
-        const token = AuthService.getToken();
-        const response = await axios.get(
-          `${BASE_URL}/api/web/management/menus`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axiosInstance.get('/api/web/management/menus');
         if (response.data.rc === 'SUCCESS') {
           const appChildren = response.data.payload.data[0]?.children || [];
           this.items = appChildren;
